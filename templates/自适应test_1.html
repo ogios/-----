@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自适应布局test</title>
+    <script src="../static/js/flexible.js"></script>
+    <script src="../static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/js/echarts.min.js"></script>
+    <script type="text/javascript" src="https://www.guanacossj.com/static/js/echarts-wordcloud.min.js"></script>
+    <script type="text/javascript" src="../static/js/china.js"></script>
+    <link rel="stylesheet" href="../static/css/自适应test_1.css">
+    <script>console.log('███████╗██╗   ██╗██████╗  █████╗ ███████╗██╗ █████╗\n██╔════╝██║   ██║██╔══██╗██╔══██╗██╔════╝██║██╔══██╗                                                 \n█████╗  ██║   ██║██████╔╝███████║███████╗██║███████║                                                 \n██╔══╝  ██║   ██║██╔══██╗██╔══██║╚════██║██║██╔══██║                                                 \n███████╗╚██████╔╝██║  ██║██║  ██║███████║██║██║  ██║                                                 \n╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝╚═╝  ╚═╝                                                 \n                                                                                                     \n██████╗ ██████╗         ██████╗ ██╗      █████╗ ████████╗███████╗███████╗██████╗  ██████╗ ███╗   ███╗\n██╔══██╗██╔══██╗        ██╔══██╗██║     ██╔══██╗╚══██╔══╝██╔════╝██╔════╝██╔══██╗██╔═══██╗████╗ ████║\n██████╔╝██║  ██║        ██████╔╝██║     ███████║   ██║   █████╗  █████╗  ██████╔╝██║   ██║██╔████╔██║\n██╔══██╗██║  ██║        ██╔═══╝ ██║     ██╔══██║   ██║   ██╔══╝  ██╔══╝  ██╔══██╗██║   ██║██║╚██╔╝██║\n██████╔╝██████╔╝███████╗██║     ███████╗██║  ██║   ██║   ███████╗██║     ██║  ██║╚██████╔╝██║ ╚═╝ ██║\n╚═════╝ ╚═════╝ ╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝')</script>
+</head>
+<body>
+    <div class="viewport">
+        <div class="column count_1">
+            <div class="chart inner 1_map" style="height:5rem"></div>
+            <div class="chart inner 1_bar" style="height:4rem"></div>
+            <div class="chart inner 1_word" style="height:2.875rem"></div>
+        </div>
+        <div class="column count_2">
+            <div id="main" class="inner 1_map" style="height:6.25rem;"></div>
+            <div class="chart inner 2_bar" style="height:4.5rem"></div>
+        </div>
+        <div class="column count_3">
+            <!-- <div class="chart inner" style="height:2.875rem"></div> -->
+            <div class="chart inner" style="height:7.875rem"></div>
+            <div class="chart inner" style="height:4rem"></div>
+        </div>
+    </div>
+    <div class="select">
+        <a href="../test2/">人工智能</a>
+        <a>大数据分析</a>
+        <a>大数据开发</a>
+        <a>数据库工程师</a>
+        <a>全栈开发工程师</a>
+    </div>
+    <button id="select">⩺</button>
+
+
+    <script>
+        // 异步实现使用的是ajax。fetch与axios本人暂时还没熟悉其对应的ES6代码语法(当然也可以不用ES6)
+        function getChartClass(str) {
+            str = str.replace('chart', '').replace(/ /g, '').replace('inner', '');
+            return str;
+        }
+        // 实现请求与后端返回数据的前提：
+        // 在 class 属性添加 'chart' 用以定位所有图表框
+        // 在 python 中的字典添加对应 class 所对应的画图方法，例如第一张地图的class为'1_map'，对应python中自定义字典里的charts.maps方法
+
+        // .each()循环找到所有需要请求的图（图的需求在class里）集合在一个数组里
+        var charts=[];
+        $('.chart').each(function(index,ele){
+            charts.push(getChartClass(ele.getAttribute('class')));
+        });
+        var options = {};
+
+        // each遍历上面定义的数组(index参数为数组内单个数据的索引值，ele为数组内单个数据)
+        // 用each的原因是方便。每个图都专门写一串对应的ajax请求会在 后期维护更改或者图很多 的情况下加大代码复杂度
+        // 针对每个需求进行对应图的请求(ajax请求)
+
+        // 简单的理解(下面一行为面向用户的注释，具体实现方法在上面的三段注释中):
+        // 可以理解为图的主要请求参数接口在html中class为chart的 dom 内，在dom的class内设置所需图的参数，例如 1_map
+        $.each(charts,function(index,ele){
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: 'http://127.0.0.1:8337/chart?chart='+ele.split('_')[1]+'&num='+ele.split('_')[0],
+                success: function (data) {
+
+                    // if 以及 if 内的方法用于解决图的渐变设置问题
+                    if (ele in {'2_bar':''}){
+
+                        // 具体解释：后端画图后传入的是 json 文件，但是json里 js 对象的创建在python里不能直接实现
+                        // 需要用一个类进行传递(pyecharts自带的JsCode类可以进行传递)，但是这个类用json传递与前端解析的时候并不会被解析为一个js对象，而只是简单的字符串
+                        // 我们需要手动进行调整，把字符串代码变为实例对象。这里使用的简单的 eval 进行转换 (听说用这个函数很容易被网络攻击，不过应该没人会这么无聊攻击咱这个)
+                        data.series[0].itemStyle.normal.color = eval(data.series[0].itemStyle.normal.color);
+                    };
+
+                    // init 创建实例化对象，用 jq 进行选取。需要注意的是jq选取下来的是jq数组对象，并非直接的 dom 对象
+                    // setOption 内传入的 data 是请求成功后，后端传入的json文件，文件内容是图的设置，包含画图用到的数据。
+                    options[ele]=data;
+                    echarts.init($('.'+ele)[0], 'white', { renderer: 'canvas' }).setOption(data);
+
+                    // 下面的语句主要目标为实现点击切换图到大框内
+                    // 把这段代码写在这里的 原因 以及 前情提要:
+                    
+                    // 方法的定义也有着记忆性,方法内的内容一旦被定义,调用方法的时候方法内的内容 (包含jq选择器) 并不会根据实际内容的更新进行更新
+                    // 也即异步加载完成前定义方法会运行方法内的 jq选择器
+                    // 异步加载完成后,调用这个方法内的jq选择器选择下来的 内容 并不会更新
+                    // 在本次的功能实现中，我们使用canvas标签进行点击的获取(canvas覆盖了div，在最上层，也就是点不到他原始的div)
+                    // 但是canvas是在请求图之后自动创建的，所以需要在异步返回数据之后再定义点击事件
+                    // **如果 原生js 的dom选取不会出现这种问题那我就成冤大头了(没试过)**
+
+                    // while循环不行，会一直在循环里运行，阻塞异步请求返回的数据
+                    // $.when()不适用于这里用$.each()循环异步请求的代码(使用的话只会在循环结束之后就定义方法，并不会等待异步返回数据)
+                    
+                    // if 用于判断画的图是否为最后一个，防止多次请求多次定义方法浪费资源与时间，用里面的参数控制
+                    if ($('canvas').length==4){
+                        $('canvas').click(function () {
+                            var ele= getChartClass(this.parentNode.parentNode.getAttribute('class'));
+                           
+                            // 主框使用 id 属性进行定位且 class 中不包含chart属性(后面单独画图)
+                            // 在进行内容的添加与更换之前需要进行内容清除，不然echarts的option会重叠，图会变得很奇怪
+                            echarts.init($('#main')[0]).clear();
+                            $('#main')[0].innerHTML = '';
+                            $('#main').attr('_echarts_instance_', '');
+                            echarts.init($('#main')[0], 'white', { renderer: 'canvas' }).setOption(options[ele])
+                            // $.ajax({
+                            //     type:'GET',
+                            //     dataType:'json',
+                            //     url:'http://127.0.0.1:8337/chart?chart='+ele.split('_')[1]+'&num='+ele.split('_')[0],
+                            //     success: function (data){
+                            //         if (ele in { '2_bar': '' }) {
+                            //             data.series[0].itemStyle.normal.color = eval(data.series[0].itemStyle.normal.color);
+                            //         };
+                                    // 主框使用 id 属性进行定位且 class 中不包含chart属性(后面单独画图)
+                                    // 在进行内容的添加与更换之前需要进行内容清除，不然echarts的option会重叠，图会变得很奇怪
+                            //         echarts.init($('#main')[0]).clear();
+                            //         echarts.init($('#main')[0], 'white', { renderer: 'canvas' }).setOption(data)
+                            //     }
+                            // })
+                        });
+                    }else{
+                        console.log($('canvas').length)
+                    }
+                }
+            })
+        })
+        // 请求main主框的默认图标
+        var defaultMainChart = getChartClass($('.chart')[0].getAttribute('class'));
+
+
+
+        // 自动化设置职业选框的高度与字居中
+        var hei=parseInt($('.select').css('height'));
+        var sel_anum= $('.select a').length;
+        $('.select a').css({'height':hei/sel_anum,'line-height': String(hei / sel_anum) + 'px'});
+
+
+        // 职业选框的隐藏与点击显示
+        $('.select').fadeOut(0.1);
+        $('#select').click(function(){
+            $('.select').fadeToggle('fast');
+        });
+
+
+
+    </script>
+</body>
+</html>

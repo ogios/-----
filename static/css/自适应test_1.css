@@ -1,0 +1,190 @@
+@media screen and (max-width: 1024px) {
+    html{
+        font-size:42.66px !important;
+    }
+}
+@media screen and (min-width: 1920px) {
+    html{
+        font-size:80px !important;
+    }
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+img{
+    border: 0;
+    vertical-align: middle;
+}
+button{
+    cursor: pointer;
+}
+a{
+    text-decoration: none;
+}
+
+.inner{
+    position:relative;
+    /* border:.0125rem dashed #FFF; */
+    margin:.0 .125rem .125rem .125rem;
+    text-align:center;
+}
+
+body{
+    background-color: rgb(1, 1, 60);
+}
+
+canvas{
+    opacity: 0;
+    animation: canvasfade;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    cursor: pointer;
+    transition: all 0.2s
+}
+@keyframes canvasfade{
+    from{opacity: 0;}
+    to{opacity: 1;}
+}
+canvas:hover{
+    background-color: rgba(0, 0, 0, 0.163);
+}
+
+#main canvas{
+    cursor:auto;
+}
+#main canvas:hover{
+    background-color: rgba(255, 255, 255, 0);
+}
+
+
+.viewport{
+    display: flex;
+    bottom: 0;
+    min-width:12.8rem;
+    max-width:24rem;
+    margin: 0 auto;
+    padding: 2.5rem .20rem 0;
+    background: url(../img/titlebox-test.png) no-repeat;
+    background-size: cover;
+    min-height: 12.5rem;
+    max-height: 12.5rem;
+}
+
+.column{
+    position:relative;
+    top:-1.25rem;
+    height: 12.25rem;
+    flex: 2.5;
+    /* background-color:antiquewhite */
+}
+.viewport .column:nth-of-type(2){
+    position: relative;
+    top:0rem;
+    height: 11rem;
+    flex: 5;
+    /* background-color:blue */
+}
+
+.chart{
+    background-image: linear-gradient(#0052c4,#470097);
+    border-radius: .125rem;
+}
+
+
+/* 地图 */
+/* .map{
+    height:6.25rem;
+}
+iframe{
+    width:100%;
+    height:100%;
+} */
+
+.select{
+    position: absolute;
+    top: 1.5rem;
+    width: 2.5rem;
+    left: 0.75rem;
+    height: 5rem;
+    background-color: antiquewhite;
+}
+.select a {
+    position: relative;
+    display: block;
+    text-align: center;
+    color: rgb(139, 139, 255);
+    background-color: white;
+    /* height: 20%; */
+    width: 100%;
+    /* line-height: .7rem; */
+    cursor: pointer;
+    font-size: .19rem;
+    transition: all 0.2s;
+}
+.select a:hover {
+    color: #FFF;
+    background-color: rgb(139, 139, 255);
+    transition: all 0.2s
+}
+
+#select {
+    z-index: 999;
+    position: absolute;
+    top: 1.5rem;
+    left: 0;
+    width: .5rem;
+    height: 1.5rem;
+    border-style: none;
+    background-color: rgb(108, 72, 250);
+    color: white;
+    transition: all 0.2s;
+}
+#select:hover{
+    background-color: rgb(73, 44, 189);
+    transition: all 0.2s;
+}
+#select:active{
+    background-color: rgb(49, 28, 130);
+    transition: all 0.1s;
+}
+
+/* .select{
+    z-index: 998;;
+    background-color: #5252a7;
+    position: absolute;
+    bottom:10%;
+    margin:0 auto;
+    width: 80%;
+    height: 5%;
+    text-align: center;
+
+}
+.select a{
+    z-index:999;
+    position:relative;
+    display:inline-block;
+    text-align:center;
+    color:rgb(139, 139, 255);
+    background-color: white;
+    height: 100%;
+    width:10%;
+    line-height: .5rem;
+    cursor:pointer;
+    font-size:.25rem;
+    transition: all 0.2s;
+}
+.select a:hover{
+    color:#FFF;
+    background-color: rgb(139, 139, 255);
+    transition:all 0.2s
+}
+#select{
+    position: absolute;
+    bottom: .5rem;;
+    left:0;
+    width: .5rem;
+    height: 1.5rem;
+} */
