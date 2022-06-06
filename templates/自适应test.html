@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自适应布局test</title>
+    <script src="../static/js/flexible.js"></script>
+    <script src="../static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/js/echarts.min.js"></script>
+    <script type="text/javascript" src="https://www.guanacossj.com/static/js/echarts-wordcloud.min.js"></script>
+    <script type="text/javascript" src="../static/js/china.js"></script>
+    <link rel="stylesheet" href="../static/css/自适应test.css">
+</head>
+<body>
+    <div class="viewport">
+        <div class="column count_1">
+            <div class="chart inner 1_map" style="height:5rem"></div>
+            <div class="chart inner 1_bar" style="height:4rem"></div>
+            <div class="chart inner 1_word" style="height:2.75rem"></div>
+        </div>
+        <div class="column count_2">
+            <div class="map inner">
+                <iframe src="\static\html\foliun.html" frameborder="0"></iframe>
+            </div>
+            <div class="chart 2_bar inner" style="height:4.5rem"></div>
+        </div>
+        <div class="column count_3">3</div>
+    </div>
+    <div class="select">
+        <a href="../test2/">人工智能</a>
+        <a>大数据分析</a>
+        <a>大数据开发</a>
+        <a>数据库工程师</a>
+        <a>全栈开发工程师</a>
+    </div>
+    <button id="select">⩺</button>
+
+
+    <script>
+
+        // 循环请求图表总路由 (jquery.each() / $.each())
+        // 通过在对元素的所有图表元素的 class 属性添加 chart 来定位所有图表
+        // 在 class 属性中添加表的类，在python中的字典添加对应类所对应的画图方法(函数)
+        // 通过 GET 方法传入图表参数(chart)，在后台chart路由接受参数
+        // success 里的if是用来判断是否拥有until.JsCode做渐变颜色
+        var charts=[];
+        $('.chart').each(function(index,ele){
+            charts.push(ele.getAttribute('class').replace('chart', '').replace(/ /g, '').replace('inner', ''));
+        });
+
+        $.each(charts,function(index,ele){
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: 'http://127.0.0.1:8337/chart?chart='+ele.split('_')[1]+'&num='+ele.split('_')[0],
+                success: function (data) {
+                    if (ele in {'2_bar':''}){
+                        data.series[0].itemStyle.normal.color = eval(data.series[0].itemStyle.normal.color);
+                    };
+                    echarts.init($('.'+ele)[0], 'white', { renderer: 'canvas' }).setOption(data);
+                }
+            })
+        })
+        
+        // 自动化设置职业选框的高度与字居中
+        var hei=parseInt($('.select').css('height'));
+        var sel_anum= $('.select a').length;
+        $('.select a').css({'height':hei/sel_anum,'line-height': String(hei / sel_anum) + 'px'});
+
+
+        // 
+        $('.select').fadeOut(0.1);
+        $('#select').click(function(){
+            $('.select').fadeToggle();
+        });
+
+
+        // $.ajax({
+        //     type: "GET",
+        //     dataType: 'json',
+        //     url: 'http://127.0.0.1:8337/1_map',
+        //     success: function (data) {
+        //         echarts.init($('.1_map')[0], 'white', { renderer: 'canvas' }).setOption(data);
+        //     }
+        // })
+
+        // $.ajax({
+        //     type:"GET",
+        //     dataType:'json',
+        //     url:'http://127.0.0.1:8337/chart',
+        //     success:function(data){
+        //         echarts.init($('.1_bar')[0], 'white', { renderer: 'canvas' }).setOption(data);
+        //     }
+        // })
+    </script>
+</body>
+</html>

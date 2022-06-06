@@ -1,0 +1,2 @@
+区域填充颜色，默认为蓝色。可以传递十六进制代码、颜色名称，或者如果要绑定数据，则传递以下颜色生成器调色板之一：
+“BuGn”、“BuPu”、“GnBu”、“OrRd”、“PuBu”、“publign”、“PuRd”、“RdPu”、“YlGn”、“YlGnBu”、“YlOrBr”和“YlOrRd”。
