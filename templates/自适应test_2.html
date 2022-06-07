@@ -78,6 +78,7 @@ dGhiYmc6Ly9vdWhwZ3Aua2FhL3dzd3dlL2pxZWlpeHdobWhxYWItSlBxaWRzbWQ=`)
                     num: ele.split('_')[0],
                 },
                 function (data) {
+                    // data=JSON.parse(data);
 
                     // if 以及 if 内的方法用于解决图的渐变设置问题
                     if (ele in {'2_bar':''}){
@@ -135,7 +136,7 @@ dGhiYmc6Ly9vdWhwZ3Aua2FhL3dzd3dlL2pxZWlpeHdobWhxYWItSlBxaWRzbWQ=`)
                     }else{
                         // console.log($('canvas').length);
                     }
-                }
+                },'json'
             )
         })
         // 请求main主框的默认图标
